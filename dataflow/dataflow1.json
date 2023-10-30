@@ -1,0 +1,74 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText_singletomultipleCSV",
+						"type": "DatasetReference"
+					},
+					"name": "OPStream"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText_singletomultipleCSV",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText_singletomultipleCSV",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "splitblr"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          name as string,",
+				"          city as string,",
+				"          age as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OPStream",
+				"OPStream split(equals(city, 'blr'),",
+				"     disjoint: false) ~> splitblr@(blr, hyd)",
+				"splitblr@blr sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          name as string,",
+				"          city as string,",
+				"          age as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"splitblr@hyd sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          name as string,",
+				"          city as string,",
+				"          age as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2"
+			]
+		}
+	}
+}

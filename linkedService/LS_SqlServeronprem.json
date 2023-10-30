@@ -1,0 +1,13 @@
+{
+	"name": "LS_SqlServeronprem",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "LS_SqlServeronprem",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=myfirstsqlserver001;initial catalog=myfirstsqldb;user id=mysqldbadmin",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEZEOEUwOUNELTMwQjQtNDk4MC1BRDVFLUUxODRDNUUxREFDQV80NjJhZjg2NC1mN2E1LTRjMDEtODRlMS0yOWZmMzA2YTg1NGYiDQp9"
+		}
+	}
+}

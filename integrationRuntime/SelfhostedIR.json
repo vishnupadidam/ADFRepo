@@ -1,0 +1,7 @@
+{
+	"name": "SelfhostedIR",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Onprem/PrivateNW"
+	}
+}

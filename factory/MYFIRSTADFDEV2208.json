@@ -1,0 +1,9 @@
+{
+	"name": "MYFIRSTADFDEV2208",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "e42da777-5eed-4b82-88b8-38af5bfc85dd",
+		"tenantId": "5a7b4682-8ccd-465d-adfd-8ab1d556f67f"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "MetadataDrivenCopyTask_eb7_ControlDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SQL_DB_LS",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "MetadataDrivenCopyTask_eb7_20230829"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "MainControlTable_METADATA"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

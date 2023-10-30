@@ -1,0 +1,24 @@
+{
+	"name": "ADLS_ZIPJSON",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLS_RAW_CONTAINER_LS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "input",
+				"fileSystem": "vishnu"
+			},
+			"compression": {
+				"type": "ZipDeflate",
+				"level": "Optimal"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
