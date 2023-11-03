@@ -15,17 +15,24 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText_singletomultipleCSV",
+						"referenceName": "sourcenotmatched_ds",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
 				},
 				{
 					"dataset": {
-						"referenceName": "DelimitedText_singletomultipleCSV",
+						"referenceName": "sourcenotmatched_ds",
 						"type": "DatasetReference"
 					},
 					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "sourcenotmatched_ds",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
 				}
 			],
 			"transformations": [
@@ -43,14 +50,10 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> OPStream",
 				"OPStream split(equals(city, 'blr'),",
-				"     disjoint: false) ~> splitblr@(blr, hyd)",
+				"     equals(city, 'atk'),",
+				"     disjoint: false) ~> splitblr@(blr, atk, hyd)",
 				"splitblr@blr sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          name as string,",
-				"          city as string,",
-				"          age as string",
-				"     ),",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
@@ -58,16 +61,18 @@
 				"     skipDuplicateMapOutputs: true) ~> sink1",
 				"splitblr@hyd sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          name as string,",
-				"          city as string,",
-				"          age as string",
-				"     ),",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink2"
+				"     skipDuplicateMapOutputs: true) ~> sink2",
+				"splitblr@atk sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink3"
 			]
 		}
 	}
