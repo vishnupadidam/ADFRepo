@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "Splitlogic",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

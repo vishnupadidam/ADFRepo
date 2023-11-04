@@ -6,18 +6,18 @@
 			"sources": [
 				{
 					"name": "source1"
+				},
+				{
+					"name": "source2"
 				}
 			],
 			"sinks": [],
-			"transformations": [
-				{
-					"name": "derivedColumn1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false) ~> source1",
-				"source1 derive(column1 = ERROR_FUNCTION('')) ~> derivedColumn1"
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source2"
 			]
 		}
 	}
