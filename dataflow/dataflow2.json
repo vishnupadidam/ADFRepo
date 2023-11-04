@@ -30,14 +30,24 @@
 					"name": "Todaydeltafile"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SderivedColumn"
+				},
+				{
+					"name": "DderivedColumn2"
+				},
+				{
+					"name": "exists1"
+				},
+				{
+					"name": "filter1"
+				}
+			],
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     enableCdc: true,",
-				"     mode: 'read',",
-				"     skipInitialLoad: false) ~> sourcefiles",
+				"     ignoreNoFilesFound: false) ~> sourcefiles",
 				"source(output(",
 				"          Id as string,",
 				"          name as string,",
@@ -47,7 +57,13 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> PreviousDelta",
-				"sourcefiles sink(allowSchemaDrift: true,",
+				"sourcefiles derive(Shashcol = toBinary(sha2(256, 'Id'+'name'))) ~> SderivedColumn",
+				"PreviousDelta derive(Dhashcol = toBinary(sha2(256,'Id'+'name'))) ~> DderivedColumn2",
+				"SderivedColumn, DderivedColumn2 exists(Shashcol==Dhashcol,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> exists1",
+				"exists1 filter(ERROR_FUNCTION('')) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     umask: 0022,",
 				"     preCommands: [],",
