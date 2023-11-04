@@ -19,6 +19,13 @@
 					},
 					"name": "PreviousDelta",
 					"description": "pre"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -42,6 +49,9 @@
 				},
 				{
 					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -57,12 +67,22 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> PreviousDelta",
+				"source(output(",
+				"          empid as integer,",
+				"          name as string,",
+				"          title as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
 				"sourcefiles derive(Shashcol = toBinary(sha2(256, 'Id'+'name'))) ~> SderivedColumn",
 				"PreviousDelta derive(Dhashcol = toBinary(sha2(256,'Id'+'name'))) ~> DderivedColumn2",
 				"SderivedColumn, DderivedColumn2 exists(Shashcol==Dhashcol,",
 				"     negate:false,",
 				"     broadcast: 'auto')~> exists1",
 				"exists1 filter(ERROR_FUNCTION('')) ~> filter1",
+				"source1 derive(SQLhash = toBinary(sha2(256,'empid'))) ~> derivedColumn1",
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     umask: 0022,",
