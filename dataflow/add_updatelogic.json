@@ -21,11 +21,10 @@
 					"description": "pre"
 				},
 				{
-					"dataset": {
-						"referenceName": "AzureSqlTable1",
-						"type": "DatasetReference"
-					},
 					"name": "source1"
+				},
+				{
+					"name": "source2"
 				}
 			],
 			"sinks": [
@@ -46,9 +45,6 @@
 				},
 				{
 					"name": "exists1"
-				},
-				{
-					"name": "derivedColumn1"
 				},
 				{
 					"name": "Ststus"
@@ -80,21 +76,15 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> PreviousDelta",
-				"source(output(",
-				"          empid as integer,",
-				"          name as string,",
-				"          title as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source1",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source2",
 				"sourcefiles derive(Shashcol = sha2(256,columns())) ~> SderivedColumn",
 				"PreviousDelta derive(Dhashcol = sha2(256,columns())) ~> DderivedColumn2",
 				"SderivedColumn, DderivedColumn2 exists(Shashcol==Dhashcol,",
 				"     negate:true,",
 				"     broadcast: 'auto')~> exists1",
-				"source1 derive(SQLhash = toBinary(sha2(256,'empid'))) ~> derivedColumn1",
 				"exists1 derive(Status = 'A') ~> Ststus",
 				"Ststus union(byName: true)~> union1",
 				"DderivedColumn2, SderivedColumn exists(Dhashcol == Shashcol,",
