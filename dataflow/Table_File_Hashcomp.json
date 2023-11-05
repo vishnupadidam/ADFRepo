@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "Table_File_Hashcomp",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -10,20 +10,52 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "Previousdeltafile",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "exists1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
-				"          empid as integer,",
+				"          Id as integer,",
 				"          name as string,",
-				"          title as string",
+				"          city as string,",
+				"          age as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1"
+				"     format: 'table') ~> source1",
+				"source(output(",
+				"          Id as integer,",
+				"          name as string,",
+				"          city as string,",
+				"          age as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source1 derive(srhashcol = sha2(256,columns())) ~> derivedColumn1",
+				"source2 derive(hashp = sha2(256,columns())) ~> derivedColumn2",
+				"derivedColumn1, derivedColumn2 exists(srhashcol == hashp,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> exists1"
 			]
 		}
 	}
