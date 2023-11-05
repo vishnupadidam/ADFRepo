@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "AzureSqlTable1",
+						"referenceName": "Sourcefiles",
 						"type": "DatasetReference"
 					},
 					"name": "sourcefiles",
@@ -63,19 +63,19 @@
 			],
 			"scriptLines": [
 				"source(output(",
-				"          empid as integer,",
+				"          Id as short,",
 				"          name as string,",
-				"          title as string",
+				"          city as string,",
+				"          age as short",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> sourcefiles",
+				"     ignoreNoFilesFound: false) ~> sourcefiles",
 				"source(output(",
-				"          Id as string,",
+				"          Id as short,",
 				"          name as string,",
 				"          city as string,",
-				"          age as string",
+				"          age as short",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -89,7 +89,7 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"sourcefiles derive(Shashcol = sha2(256, columns())) ~> SderivedColumn",
+				"sourcefiles derive(Shashcol = sha2(256,columns())) ~> SderivedColumn",
 				"PreviousDelta derive(Dhashcol = sha2(256,columns())) ~> DderivedColumn2",
 				"SderivedColumn, DderivedColumn2 exists(Shashcol==Dhashcol,",
 				"     negate:true,",
