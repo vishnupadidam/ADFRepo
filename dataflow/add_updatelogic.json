@@ -55,7 +55,7 @@
 				},
 				{
 					"name": "union1",
-					"description": "Combining rows from transformation 'Ststus' and "
+					"description": "Combining rows from transformation 'Ststus' and deleted"
 				},
 				{
 					"name": "exists2"
