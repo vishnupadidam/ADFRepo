@@ -78,6 +78,12 @@
 												"type": "Expression"
 											}
 										},
+										"source2": {
+											"Src2filepath": {
+												"value": "@item().name",
+												"type": "Expression"
+											}
+										},
 										"sink1": {
 											"PthS": {
 												"value": "@item().name",
