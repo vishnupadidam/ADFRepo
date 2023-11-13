@@ -23,6 +23,9 @@
 			],
 			"transformations": [],
 			"scriptLines": [
+				"parameters{",
+				"     Parameter as string",
+				"}",
 				"source(output(",
 				"          name as string,",
 				"          city as string,",
@@ -33,6 +36,7 @@
 				"     ignoreNoFilesFound: false) ~> source1",
 				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:[($Parameter)],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

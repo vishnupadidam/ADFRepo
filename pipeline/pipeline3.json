@@ -50,33 +50,9 @@
 					},
 					"activities": [
 						{
-							"name": "Set variable1",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "namefile",
-								"value": {
-									"value": "@item().name",
-									"type": "Expression"
-								}
-							}
-						},
-						{
 							"name": "Data flow1",
 							"type": "ExecuteDataFlow",
-							"dependsOn": [
-								{
-									"activity": "Set variable1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -89,27 +65,23 @@
 								"dataflow": {
 									"referenceName": "dataflow1",
 									"type": "DataFlowReference",
+									"parameters": {
+										"Parameter": {
+											"value": "'@{item().name}'",
+											"type": "Expression"
+										}
+									},
 									"datasetParameters": {
 										"source1": {
 											"FilenameDS": {
-												"value": "@variables('namefile')",
+												"value": "@item().name",
 												"type": "Expression"
 											}
 										},
 										"sink1": {
 											"PthS": {
-												"value": "@variables('namefile')",
+												"value": "@item().name",
 												"type": "Expression"
-											}
-										}
-									},
-									"linkedServiceParameters": {
-										"sink1": {
-											"schemaLinkedService": {
-												"PthS": {
-													"value": "@variables('namefile')",
-													"type": "Expression"
-												}
 											}
 										}
 									}
