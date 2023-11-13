@@ -1,12 +1,12 @@
 {
-	"name": "DS_DF_ADLS_Sink",
+	"name": "DS_Path",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ADLS_LS",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"Filenamee": {
+			"FilenameDS": {
 				"type": "string"
 			}
 		},
@@ -15,7 +15,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Output",
+				"fileName": {
+					"value": "@dataset().FilenameDS",
+					"type": "Expression"
+				},
+				"folderPath": "input/Todaysfile",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",

@@ -1,12 +1,12 @@
 {
-	"name": "DS_DF_ADLS_Sink",
+	"name": "DS_Pathh",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ADLS_LS",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"Filenamee": {
+			"PthS": {
 				"type": "string"
 			}
 		},
@@ -15,7 +15,11 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Output",
+				"fileName": {
+					"value": "@dataset().PthS",
+					"type": "Expression"
+				},
+				"folderPath": "Output/Todaysdelta",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",
@@ -23,19 +27,6 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "name",
-				"type": "String"
-			},
-			{
-				"name": "city",
-				"type": "String"
-			},
-			{
-				"name": "age",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }

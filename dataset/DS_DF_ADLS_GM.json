@@ -1,21 +1,16 @@
 {
-	"name": "DS_DF_ADLS_Sink",
+	"name": "DS_DF_ADLS_GM",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ADLS_LS",
 			"type": "LinkedServiceReference"
-		},
-		"parameters": {
-			"Filenamee": {
-				"type": "string"
-			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Output",
+				"folderPath": "input/Todaysfile",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",
