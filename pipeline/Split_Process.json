@@ -77,7 +77,7 @@
 												"userProperties": [],
 												"typeProperties": {
 													"dataflow": {
-														"referenceName": "dataflow3",
+														"referenceName": "DF_SplitLogic",
 														"type": "DataFlowReference",
 														"parameters": {
 															"TableName": {
@@ -112,7 +112,7 @@
 												"userProperties": [],
 												"typeProperties": {
 													"dataflow": {
-														"referenceName": "dataflow3",
+														"referenceName": "DF_SplitLogic",
 														"type": "DataFlowReference",
 														"parameters": {
 															"TableName": {
