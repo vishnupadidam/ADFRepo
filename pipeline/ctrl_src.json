@@ -1,0 +1,65 @@
+{
+	"name": "ctrl_src",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select srcname from [dbo].[pty]",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable_copysrc",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "srcvar",
+					"value": {
+						"value": "@replace(replace(replace(replace(replace(replace(replace(replace(string(activity('Lookup1').output.value),'[',''),'{',''),'\\',''),'\"',''),':',''),'}',''),']',''),'srcname','')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"srcvar": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-11-26T16:25:47Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
