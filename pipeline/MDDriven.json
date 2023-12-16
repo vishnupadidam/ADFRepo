@@ -81,10 +81,115 @@
 									{
 										"name": "Wait_Y",
 										"type": "Wait",
-										"dependsOn": [],
+										"dependsOn": [
+											{
+												"activity": "Execute Pipeline1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
 										"userProperties": [],
 										"typeProperties": {
 											"waitTimeInSeconds": 1
+										}
+									},
+									{
+										"name": "Lookup2",
+										"type": "Lookup",
+										"state": "Inactive",
+										"onInactiveMarkAs": "Succeeded",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": "select Table_Name,SP_Name,Source_Name,ProcessName,ADLS_SRC_Path,ADLS_SINK_Path from md_table where Is_Active='y' and Frequency='Daily'",
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "AzureSqlTable_MD",
+												"type": "DatasetReference",
+												"parameters": {
+													"Servername": {
+														"value": "@pipeline().parameters.ServerName",
+														"type": "Expression"
+													},
+													"Databasename": {
+														"value": "@pipeline().parameters.DatabaseName",
+														"type": "Expression"
+													}
+												}
+											},
+											"firstRowOnly": false
+										}
+									},
+									{
+										"name": "Execute Pipeline1",
+										"type": "ExecutePipeline",
+										"dependsOn": [
+											{
+												"activity": "Set variable1",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											},
+											{
+												"activity": "Set variable2",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "pipeline3",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true
+										}
+									},
+									{
+										"name": "Set variable1",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "servername",
+											"value": {
+												"value": "@pipeline().parameters.ServerName",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Set variable2",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "databasename",
+											"value": {
+												"value": "@pipeline().parameters.DatabaseName",
+												"type": "Expression"
+											}
 										}
 									}
 								]
@@ -102,6 +207,14 @@
 			"DatabaseName": {
 				"type": "string",
 				"defaultValue": "sqldbpvv"
+			}
+		},
+		"variables": {
+			"servername": {
+				"type": "String"
+			},
+			"databasename": {
+				"type": "String"
 			}
 		},
 		"annotations": []
