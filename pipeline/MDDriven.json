@@ -27,6 +27,10 @@
 							"Servername": {
 								"value": "@pipeline().parameters.ServerName",
 								"type": "Expression"
+							},
+							"Databasename": {
+								"value": "@pipeline().parameters.DatabaseName",
+								"type": "Expression"
 							}
 						}
 					}
