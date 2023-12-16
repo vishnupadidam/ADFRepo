@@ -57,7 +57,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "metadatatbl"
+			"table": "md_table"
 		}
 	}
 }
