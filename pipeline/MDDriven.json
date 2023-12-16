@@ -39,10 +39,12 @@
 		],
 		"parameters": {
 			"ServerName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "sqlserverpvv"
 			},
 			"DatabaseName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "sqldbpvv"
 			}
 		},
 		"annotations": []
