@@ -546,10 +546,116 @@
 											{
 												"name": "Wait_Y",
 												"type": "Wait",
-												"dependsOn": [],
+												"dependsOn": [
+													{
+														"activity": "Execute Pipeline1",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
 												"userProperties": [],
 												"typeProperties": {
 													"waitTimeInSeconds": 1
+												}
+											},
+											{
+												"name": "Lookup2",
+												"type": "Lookup",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "AzureSqlSource",
+														"sqlReaderQuery": "select Table_Name,SP_Name,Source_Name,ProcessName,ADLS_SRC_Path,ADLS_SINK_Path from md_table where Is_Active='y' and Frequency='Daily'",
+														"queryTimeout": "02:00:00",
+														"partitionOption": "None"
+													},
+													"dataset": {
+														"referenceName": "AzureSqlTable_MD",
+														"type": "DatasetReference",
+														"parameters": {
+															"Servername": {
+																"value": "@pipeline().parameters.ServerName",
+																"type": "Expression"
+															},
+															"Databasename": {
+																"value": "@pipeline().parameters.DatabaseName",
+																"type": "Expression"
+															}
+														}
+													},
+													"firstRowOnly": false
+												}
+											},
+											{
+												"name": "Execute Pipeline1",
+												"type": "ExecutePipeline",
+												"dependsOn": [
+													{
+														"activity": "Set variable1",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "Set variable2",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"userProperties": [],
+												"typeProperties": {
+													"pipeline": {
+														"referenceName": "pipeline3",
+														"type": "PipelineReference"
+													},
+													"waitOnCompletion": true,
+													"parameters": {}
+												}
+											},
+											{
+												"name": "Set variable1",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "servername",
+													"value": {
+														"value": "@pipeline().parameters.ServerName",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Set variable2",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "databasename",
+													"value": {
+														"value": "@pipeline().parameters.DatabaseName",
+														"type": "Expression"
+													}
 												}
 											}
 										]
@@ -572,10 +678,19 @@
 						"defaultValue": "sqldbpvv"
 					}
 				},
+				"variables": {
+					"servername": {
+						"type": "String"
+					},
+					"databasename": {
+						"type": "String"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable_MD')]"
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable_MD')]",
+				"[concat(variables('factoryId'), '/pipelines/pipeline3')]"
 			]
 		},
 		{
@@ -1450,6 +1565,161 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup2",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select Table_Name,SP_Name,Source_Name,ProcessName,ADLS_SRC_Path,ADLS_SINK_Path from md_table where Is_Active='y' and Frequency='Daily' and ProcessName='LDG_ADLS'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlTable_MD",
+								"type": "DatasetReference",
+								"parameters": {
+									"Servername": {
+										"value": "sqlserverpvv",
+										"type": "Expression"
+									},
+									"Databasename": {
+										"value": "sqldbpvv",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup2').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"sqlReaderStoredProcedureName": {
+												"value": "@item().SP_Name",
+												"type": "Expression"
+											},
+											"storedProcedureParameters": {
+												"frequency": {
+													"value": "d"
+												}
+											},
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "AzureSqlTable",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DelimitedText8",
+											"type": "DatasetReference",
+											"parameters": {
+												"foldername": {
+													"value": "@activity('Lookup2').output.value[0].ADLS_SINK_Path",
+													"type": "Expression"
+												},
+												"filename": {
+													"value": "@concat(activity('Lookup2').output.value[0].Table_Name,'.csv')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"servername": {
+						"type": "String"
+					},
+					"databasename": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable_MD')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText8')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlTable')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1476,8 +1746,11 @@
 					}
 				],
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "sptbl"
+					"schema": {
+						"value": "dbo",
+						"type": "Expression"
+					},
+					"table": "*"
 				}
 			},
 			"dependsOn": [
@@ -1894,6 +2167,134 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText7')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "MD_Table.csv",
+						"fileSystem": "vishnu"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "DataFactoryName",
+						"type": "String"
+					},
+					{
+						"name": "Environment",
+						"type": "String"
+					},
+					{
+						"name": "SQL_Server",
+						"type": "String"
+					},
+					{
+						"name": "SQL_Database",
+						"type": "String"
+					},
+					{
+						"name": "Schema",
+						"type": "String"
+					},
+					{
+						"name": "Table_Name",
+						"type": "String"
+					},
+					{
+						"name": "SP_Name",
+						"type": "String"
+					},
+					{
+						"name": "Is_Active",
+						"type": "String"
+					},
+					{
+						"name": "Source_Name",
+						"type": "String"
+					},
+					{
+						"name": "Process",
+						"type": "String"
+					},
+					{
+						"name": "ADLS_SRC_Path",
+						"type": "String"
+					},
+					{
+						"name": "ADLS_SINK_Path",
+						"type": "String"
+					},
+					{
+						"name": "Is_IDL",
+						"type": "String"
+					},
+					{
+						"name": "Frequency",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText8')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"foldername": {
+						"type": "string"
+					},
+					"filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().foldername",
+							"type": "Expression"
+						},
+						"fileSystem": "vishnu"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Sink')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2185,91 +2586,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS')]",
 				"[concat(variables('factoryId'), '/datasets/DelimitedText6')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DelimitedText7')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "MD_Table.csv",
-						"fileSystem": "vishnu"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "DataFactoryName",
-						"type": "String"
-					},
-					{
-						"name": "Environment",
-						"type": "String"
-					},
-					{
-						"name": "SQL_Server",
-						"type": "String"
-					},
-					{
-						"name": "SQL_Database",
-						"type": "String"
-					},
-					{
-						"name": "Schema",
-						"type": "String"
-					},
-					{
-						"name": "Table_Name",
-						"type": "String"
-					},
-					{
-						"name": "SP_Name",
-						"type": "String"
-					},
-					{
-						"name": "Is_Active",
-						"type": "String"
-					},
-					{
-						"name": "Source_Name",
-						"type": "String"
-					},
-					{
-						"name": "Process",
-						"type": "String"
-					},
-					{
-						"name": "ADLS_SRC_Path",
-						"type": "String"
-					},
-					{
-						"name": "ADLS_SINK_Path",
-						"type": "String"
-					},
-					{
-						"name": "Is_IDL",
-						"type": "String"
-					},
-					{
-						"name": "Frequency",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
 			]
 		}
 	]
