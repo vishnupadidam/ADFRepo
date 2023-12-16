@@ -26,11 +26,11 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"Servername": {
-								"value": "@variables('servername')",
+								"value": "sqlserverpvv",
 								"type": "Expression"
 							},
 							"Databasename": {
-								"value": "@variables('databasename')",
+								"value": "sqldbpvv",
 								"type": "Expression"
 							}
 						}
