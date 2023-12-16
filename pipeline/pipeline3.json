@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select Table_Name,SP_Name,Source_Name,ProcessName,ADLS_SRC_Path,ADLS_SINK_Path from md_table where Is_Active='y' and Frequency='Daily'",
+						"sqlReaderQuery": "select Table_Name,SP_Name,Source_Name,ProcessName,ADLS_SRC_Path,ADLS_SINK_Path from md_table where Is_Active='y' and Frequency='Daily' and ProcessName='LDG_ADLS'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -70,15 +70,18 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "DelimitedTextSource",
-									"storeSettings": {
-										"type": "AzureBlobFSReadSettings",
-										"recursive": true,
-										"enablePartitionDiscovery": false
+									"type": "AzureSqlSource",
+									"sqlReaderStoredProcedureName": {
+										"value": "@item().SP_Name",
+										"type": "Expression"
 									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
-									}
+									"storedProcedureParameters": {
+										"frequency": {
+											"value": "d"
+										}
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
 								},
 								"sink": {
 									"type": "DelimitedTextSink",
@@ -103,18 +106,8 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "DelimitedText8",
-									"type": "DatasetReference",
-									"parameters": {
-										"foldername": {
-											"value": "@activity('Lookup2').output.value.ADLS_SRC_Path",
-											"type": "Expression"
-										},
-										"filename": {
-											"value": "@activity('Lookup2').output.value.SP_Name",
-											"type": "Expression"
-										}
-									}
+									"referenceName": "AzureSqlTable",
+									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
@@ -123,11 +116,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"foldername": {
-											"value": "@activity('Lookup2').output.value.ADLS_SINK_Path",
+											"value": "@activity('Lookup2').output.value[0].ADLS_SINK_Path",
 											"type": "Expression"
 										},
 										"filename": {
-											"value": "@concat(activity('Lookup2').output.value.Table_Name,'.csv')",
+											"value": "@concat(activity('Lookup2').output.value[0].Table_Name,'.csv')",
 											"type": "Expression"
 										}
 									}

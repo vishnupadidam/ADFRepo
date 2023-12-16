@@ -21,11 +21,7 @@
 				"name": "title",
 				"type": "nvarchar"
 			}
-		],
-		"typeProperties": {
-			"schema": "dbo",
-			"table": "sptbl"
-		}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
