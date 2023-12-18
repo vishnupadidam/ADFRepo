@@ -1,5 +1,13 @@
 {
 	"name": "Adf-demopv",
+	"properties": {
+		"globalParameters": {
+			"gp": {
+				"type": "string",
+				"value": "servername"
+			}
+		}
+	},
 	"location": "eastus",
 	"identity": {
 		"type": "SystemAssigned",
