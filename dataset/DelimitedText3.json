@@ -1,5 +1,5 @@
 {
-	"name": "Split_Sink_HCA",
+	"name": "DelimitedText3",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Output/Split",
+				"folderPath": "Split_Process/IDL",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",
@@ -20,15 +20,23 @@
 		},
 		"schema": [
 			{
+				"name": "Id",
+				"type": "String"
+			},
+			{
 				"name": "name",
 				"type": "String"
 			},
 			{
-				"name": "city",
+				"name": "entity",
 				"type": "String"
 			},
 			{
-				"name": "age",
+				"name": "dspid",
+				"type": "String"
+			},
+			{
+				"name": "phno",
 				"type": "String"
 			}
 		]

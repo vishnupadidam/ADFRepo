@@ -2,7 +2,7 @@
 	"name": "Split_Source",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ADLS_LS",
+			"referenceName": "AzureDataLakeStorage1",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -19,7 +19,7 @@
 					"value": "@dataset().Filename",
 					"type": "Expression"
 				},
-				"folderPath": "input",
+				"folderPath": "Split_Process/IDL",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",
