@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "input/Split_Input",
+				"folderPath": "Split_Process/IDL",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",
