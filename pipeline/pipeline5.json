@@ -1,0 +1,80 @@
+{
+	"name": "pipeline5",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Wait1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pl5var",
+					"value": {
+						"value": "@pipeline().parameters.pl5par",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Set variable2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipeline6",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"pl6par": {
+							"value": "@pipeline().parameters.pl5par",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"pl5par": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"pl5var": {
+				"type": "String"
+			},
+			"pl6var": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}

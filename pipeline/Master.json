@@ -1,0 +1,84 @@
+{
+	"name": "Master",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipeline7",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Execute Pipeline2",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pipeline5",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"pl5par": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "mastervar",
+					"value": {
+						"value": "@pipeline().RunId",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"mastervar": {
+				"type": "String"
+			},
+			"pl5var": {
+				"type": "String"
+			},
+			"pl6var": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
