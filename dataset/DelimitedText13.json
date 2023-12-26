@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText12",
+	"name": "DelimitedText13",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage1",
@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Output/Split/Temp",
+				"fileName": "Configfile.csv",
+				"folderPath": "input",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",
@@ -18,6 +19,19 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "Src_Folder",
+				"type": "String"
+			},
+			{
+				"name": "Sink_Folder",
+				"type": "String"
+			},
+			{
+				"name": "FileName",
+				"type": "String"
+			}
+		]
 	}
 }

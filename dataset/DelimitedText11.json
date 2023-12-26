@@ -5,13 +5,27 @@
 			"referenceName": "AzureDataLakeStorage1",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"src_folder": {
+				"type": "string"
+			},
+			"src_filename": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "hca.csv",
-				"folderPath": "Output/Split/hca/abc",
+				"fileName": {
+					"value": "@dataset().src_filename",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().src_folder",
+					"type": "Expression"
+				},
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",
