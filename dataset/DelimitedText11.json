@@ -6,10 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"src_folder": {
-				"type": "string"
-			},
-			"src_filename": {
+			"sink_folder": {
 				"type": "string"
 			}
 		},
@@ -18,12 +15,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@dataset().src_filename",
-					"type": "Expression"
-				},
 				"folderPath": {
-					"value": "@dataset().src_folder",
+					"value": "@dataset().sink_folder",
 					"type": "Expression"
 				},
 				"fileSystem": "vishnu"

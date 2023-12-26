@@ -117,15 +117,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "DelimitedText9",
+									"referenceName": "DelimitedText11",
 									"type": "DatasetReference",
 									"parameters": {
-										"foldername": {
+										"sink_folder": {
 											"value": "@pipeline().parameters.sinkfoldername",
-											"type": "Expression"
-										},
-										"filename": {
-											"value": "@pipeline().parameters.sinkfilename",
 											"type": "Expression"
 										}
 									}
