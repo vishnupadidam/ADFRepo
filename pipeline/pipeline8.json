@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@greater(int(pipeline().parameters.count),2)",
+						"value": "@greater(int(pipeline().parameters.count),1)",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
