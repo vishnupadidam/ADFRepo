@@ -1,1 +1,6 @@
-{}
+{
+	"gp": {
+		"type": "string",
+		"value": "servername"
+	}
+}
