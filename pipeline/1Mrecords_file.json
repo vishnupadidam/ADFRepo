@@ -438,7 +438,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"foldername": {
-											"value": "@item().Sink_Folder",
+											"value": "@item().Src_Folder",
 											"type": "Expression"
 										},
 										"filename": {
@@ -458,6 +458,8 @@
 						{
 							"name": "Delete1_copy1",
 							"type": "Delete",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",

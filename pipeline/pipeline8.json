@@ -121,7 +121,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sink_folder": {
-											"value": "@pipeline().parameters.sinkfoldername",
+											"value": "@pipeline().parameters.srcfoldername",
 											"type": "Expression"
 										}
 									}
