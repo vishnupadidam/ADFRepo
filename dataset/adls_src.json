@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "input/tables",
+				"folderPath": "input/tablesss",
 				"fileSystem": "vishnu"
 			},
 			"columnDelimiter": ",",

@@ -1,0 +1,23 @@
+{
+	"name": "pipeline10",
+	"properties": {
+		"activities": [
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "abc",
+					"errorCode": "12"
+				}
+			}
+		],
+		"variables": {
+			"status_pl": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
