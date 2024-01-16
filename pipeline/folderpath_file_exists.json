@@ -80,7 +80,7 @@
 									}
 								},
 								"fieldList": [
-									"exists"
+									"childItems"
 								],
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
@@ -136,6 +136,14 @@
 				}
 			}
 		],
+		"variables": {
+			"splitvar": {
+				"type": "String"
+			},
+			"var": {
+				"type": "Array"
+			}
+		},
 		"annotations": []
 	}
 }
