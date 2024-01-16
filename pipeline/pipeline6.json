@@ -1,0 +1,39 @@
+{
+	"name": "pipeline6",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "splitvar",
+					"value": {
+						"value": "@join(skip(split(pipeline().parameters.path,'_'),3),'_')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"path": {
+				"type": "string",
+				"defaultValue": "ReltioMDM_HCA_DDD_HCA"
+			}
+		},
+		"variables": {
+			"splitvar": {
+				"type": "String"
+			},
+			"var": {
+				"type": "Array"
+			}
+		},
+		"annotations": []
+	}
+}
