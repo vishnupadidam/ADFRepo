@@ -1,5 +1,5 @@
 {
-	"name": "dataflow5",
+	"name": "Select_IF",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
