@@ -10,11 +10,17 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "MD_Table.csv",
+				"folderPath": "output/test",
 				"fileSystem": "vishnu"
 			},
-			"columnDelimiter": ",",
-			"escapeChar": "\\",
+			"columnDelimiter": {
+				"value": "%",
+				"type": "Expression"
+			},
+			"escapeChar": {
+				"value": "^",
+				"type": "Expression"
+			},
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
