@@ -1,0 +1,80 @@
+{
+	"name": "DelimitedText8",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "MD_Table.csv",
+				"fileSystem": "vishnu"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "DataFactoryName",
+				"type": "String"
+			},
+			{
+				"name": "Environment",
+				"type": "String"
+			},
+			{
+				"name": "SQL_Server",
+				"type": "String"
+			},
+			{
+				"name": "SQL_Database",
+				"type": "String"
+			},
+			{
+				"name": "Schema",
+				"type": "String"
+			},
+			{
+				"name": "Table_Name",
+				"type": "String"
+			},
+			{
+				"name": "SP_Name",
+				"type": "String"
+			},
+			{
+				"name": "Is_Active",
+				"type": "String"
+			},
+			{
+				"name": "Source_Name",
+				"type": "String"
+			},
+			{
+				"name": "Process",
+				"type": "String"
+			},
+			{
+				"name": "ADLS_SRC_Path",
+				"type": "String"
+			},
+			{
+				"name": "ADLS_SINK_Path",
+				"type": "String"
+			},
+			{
+				"name": "Is_IDL",
+				"type": "String"
+			},
+			{
+				"name": "Frequency",
+				"type": "String"
+			}
+		]
+	}
+}

@@ -1,0 +1,62 @@
+{
+	"name": "splchar",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText8",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText9",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          DataFactoryName as string,",
+				"          Environment as string,",
+				"          SQL_Server as string,",
+				"          SQL_Database as string,",
+				"          Schema as string,",
+				"          Table_Name as string,",
+				"          SP_Name as string,",
+				"          Is_Active as string,",
+				"          Source_Name as string,",
+				"          Process as string,",
+				"          ADLS_SRC_Path as string,",
+				"          ADLS_SINK_Path as string,",
+				"          Is_IDL as string,",
+				"          Frequency as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Id as string,",
+				"          name as string,",
+				"          entity as string,",
+				"          dspid as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     quoteAll: true) ~> sink1"
+			]
+		}
+	}
+}
