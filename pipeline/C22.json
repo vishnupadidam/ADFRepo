@@ -1,0 +1,129 @@
+{
+	"name": "C22",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "text/xml",
+						"charset": "utf-8"
+					},
+					"url": "http://www.dneonline.com/calculator.asmx",
+					"body": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:tem=\"http://tempuri.org/\">\n   <soapenv:Header/>\n   <soapenv:Body>\n      <tem:Add>\n         <tem:intA>1</tem:intA>\n         <tem:intB>2</tem:intB>\n      </tem:Add>\n   </soapenv:Body>\n</soapenv:Envelope>\n\n"
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "res",
+					"value": {
+						"value": "@json(xml(replace(string(xml(activity('Lookup1').output.firstRow)), ':', ''))).Envelope.Body.AddResponse.AddResult",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "val",
+					"value": {
+						"value": "@json(xml(replace(string(xml(activity('GetSessionID').output.firstRow)), ':', ''))).Envelope.Body.DoLoginResponse.DoLoginResult.SecurityProfile.Session.SessionId",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Web1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "XmlSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "POST",
+							"additionalHeaders": "Content-Type: text/xml; charset=utf-8",
+							"requestBody": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:tem=\"http://tempuri.org/\">\n   <soapenv:Header/>\n   <soapenv:Body>\n      <tem:Add>\n         <tem:intA>1</tem:intA>\n         <tem:intB>2</tem:intB>\n      </tem:Add>\n   </soapenv:Body>\n</soapenv:Envelope>\n\n",
+							"requestTimeout": ""
+						},
+						"formatSettings": {
+							"type": "XmlReadSettings",
+							"validationMode": "none",
+							"namespaces": true
+						}
+					},
+					"dataset": {
+						"referenceName": "Xml1",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"variables": {
+			"res": {
+				"type": "String"
+			},
+			"val": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
