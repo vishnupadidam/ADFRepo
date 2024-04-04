@@ -382,6 +382,9 @@
 									]
 								}
 							],
+							"policy": {
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
@@ -496,6 +499,8 @@
 				}
 			}
 		],
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2023-12-27T07:17:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

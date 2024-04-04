@@ -3,88 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Switch",
-				"type": "Switch",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"on": {
-						"value": "@pipeline().parameters.ch_srcname",
-						"type": "Expression"
-					},
-					"cases": [
-						{
-							"value": "C_LDG_PTY.csv",
-							"activities": [
-								{
-									"name": "Data flow1",
-									"type": "ExecuteDataFlow",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataflow": {
-											"referenceName": "dataflow1",
-											"type": "DataFlowReference",
-											"parameters": {
-												"DFtablename": "concat(dspid, '_hca')"
-											}
-										},
-										"compute": {
-											"coreCount": 8,
-											"computeType": "General"
-										},
-										"traceLevel": "Fine"
-									}
-								}
-							]
-						},
-						{
-							"value": "C_LDG_PHON_COMM.csv",
-							"activities": [
-								{
-									"name": "Data flow2",
-									"type": "ExecuteDataFlow",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataflow": {
-											"referenceName": "dataflow1",
-											"type": "DataFlowReference",
-											"parameters": {
-												"DFtablename": "concat(dspid, '_ph')"
-											}
-										},
-										"compute": {
-											"coreCount": 8,
-											"computeType": "General"
-										},
-										"traceLevel": "Fine"
-									}
-								}
-							]
-						}
-					]
-				}
-			},
-			{
-				"name": "Get Metadata1",
-				"type": "GetMetadata",
+				"name": "Copy data1",
+				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -95,130 +15,56 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataset": {
-						"referenceName": "adls_src",
-						"type": "DatasetReference"
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "*",
+							"wildcardFileName": "*",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
 					},
-					"fieldList": [
-						"childItems"
-					],
-					"storeSettings": {
-						"type": "AzureBlobFSReadSettings",
-						"recursive": true,
-						"enablePartitionDiscovery": false
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
 					},
-					"formatSettings": {
-						"type": "DelimitedTextReadSettings"
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
-				}
-			},
-			{
-				"name": "ForEach1",
-				"type": "ForEach",
-				"dependsOn": [
+				},
+				"inputs": [
 					{
-						"activity": "Get Metadata1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
 					}
 				],
-				"userProperties": [],
-				"typeProperties": {
-					"items": {
-						"value": "@activity('Get Metadata1').output.childItems",
-						"type": "Expression"
-					},
-					"activities": [
-						{
-							"name": "Switch_copy1",
-							"type": "Switch",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"on": {
-									"value": "@item().name",
-									"type": "Expression"
-								},
-								"cases": [
-									{
-										"value": "C_LDG_PTY.csv",
-										"activities": [
-											{
-												"name": "Data flow1_copy1",
-												"type": "ExecuteDataFlow",
-												"dependsOn": [],
-												"policy": {
-													"timeout": "0.12:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"dataflow": {
-														"referenceName": "dataflow1",
-														"type": "DataFlowReference",
-														"parameters": {
-															"DFtablename": "concat(dspid, '_hca')"
-														}
-													},
-													"compute": {
-														"coreCount": 8,
-														"computeType": "General"
-													},
-													"traceLevel": "Fine"
-												}
-											}
-										]
-									},
-									{
-										"value": "C_LDG_PHON_COMM.csv",
-										"activities": [
-											{
-												"name": "Data flow2_copy1",
-												"type": "ExecuteDataFlow",
-												"dependsOn": [],
-												"policy": {
-													"timeout": "0.12:00:00",
-													"retry": 0,
-													"retryIntervalInSeconds": 30,
-													"secureOutput": false,
-													"secureInput": false
-												},
-												"userProperties": [],
-												"typeProperties": {
-													"dataflow": {
-														"referenceName": "dataflow1",
-														"type": "DataFlowReference",
-														"parameters": {
-															"DFtablename": "concat(dspid, '_ph')"
-														}
-													},
-													"compute": {
-														"coreCount": 8,
-														"computeType": "General"
-													},
-													"traceLevel": "Fine"
-												}
-											}
-										]
-									}
-								]
-							}
-						}
-					]
-				}
+				"outputs": [
+					{
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
-		"parameters": {
-			"ch_srcname": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
-		"lastPublishTime": "2023-12-11T08:22:33Z"
+		"lastPublishTime": "2024-03-16T17:34:25Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
